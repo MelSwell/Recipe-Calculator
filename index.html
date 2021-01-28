@@ -73,8 +73,8 @@
                 
                 document.getElementById("ingredients").appendChild(newIngredientEntry);
                 
-                //Each time we add a new ingredient to the DOM, we update a Nodelist containing all 
-                //ingredients present on the page and add this event listener to each one
+                //Each time a new ingredient is added to the DOM, we update a Nodelist containing all 
+                //"add ingredient buttons" present on the page and add this event listener to each one
                 let addIngredientButtons = document.querySelectorAll("#add-ingredient");
                 
                 for (const button of addIngredientButtons){
@@ -98,7 +98,7 @@
             //called in the body of convertRecipeButtonHandler
             function isIngredientInputValid (){
                 let ingredients = document.querySelectorAll("#ingredient");
-                //We iterate through all ingredients currently present in the DOM, 
+                //Iterates through all ingredients currently present in the DOM, 
                 //if we encounter invalid inputs, iteration will stop and return false, 
                 //otherwise the iteration will finish and function will return true
                 for (const ingredient of ingredients){
@@ -111,7 +111,7 @@
                 return true;
             }
 
-            //We call the convertRecipe function within the body of 
+            //Calls the convertRecipe function within the body of 
             //this event handler after validating the user inputs
             function convertRecipeButtonHandler (){    
                 if (isYieldInputValid() === false){
@@ -125,7 +125,7 @@
 
             //This function handles the actual manipulation and insertion of 
             //new data into the user interface, 
-            //we call it in the body of the convertRecipeButtonHandler function
+            //Called in the body of the convertRecipeButtonHandler function
             function convertRecipe (){
                 resetOutput(); //Resets the outputBox element to its original, empty state
                 let originalYield = document.getElementById("original-yield").value;
