@@ -1,0 +1,52 @@
+body{
+    display: flex;
+}
+
+#user-prompt{
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#adjustment {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+#convert-button{
+    margin-top: 10px;  
+}
+
+input#amount {
+    width: 60px;
+}
+
+#add-ingredient{
+    cursor: pointer;
+}
+
+#ingredient{
+    margin-bottom: 4px;
+}
+
+
+
+#conversion-output {
+    width: 54%;
+    height: fit-content;
+    margin-top: 46px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#conversion-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

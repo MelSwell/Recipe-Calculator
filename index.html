@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recipe Calculator</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <div id="user-prompt">
+            <div id="adjustment">      
+                <label for="original-yield">How many does the original recipe serve?</label>
+                <div class="ui right labeled input">    
+                    <input type="text" id="original-yield" name="original-yield" required>
+                    <div class="ui basic label">People</div>
+                </div>    
+                    
+                <label for="user-yield">How many would you like to serve?</label>
+                <div class="ui right labeled input">    
+                    <input type="text" id="user-yield" name="user-yield" required>
+                    <div class="ui basic label">People</div>
+                </div>  
+
+            </div>
+            <div id="ingredients">
+                <div id="ingredient">    
+                    <label for="amount">Amount:</label>
+                    <input type="text" id="amount" name="amount">
+                    
+                    <label for="measurement"></label>
+                    <select name="measurement" id="measurement">
+                        <option value="none">--</option>
+                        <option value="ounces">oz.</option>
+                        <option value="tablespoons">tbsp.</option>
+                        <option value="teaspoons">tsp.</option>
+                        <option value="cups">cups</option>
+                        <option value="pounds">lbs</option>
+                        <option value="gallons">gals.</option>
+                        <option value="quarts">qts.</option>
+                        <option value="pints">pts.</option>
+                    </select>
+                    <label for="name">Ingredient:</label>
+                    <input type="text" id="name" name="name">
+                    <i class="plus circle icon" id="add-ingredient"></i>
+                </div>        
+            </div>
+            <div>
+                <button id="convert-button">Convert Your Recipe!</button>
+            </div>   
+        </div>
+        <div id="conversion-output">  
+            <div id="conversion-content" class="ui segment">
+                
+            </div>
+            <div>
+                <button id="reset-button">Reset</button>
+            </div>
+        </div>    
+        <script>
+            let addIngredientButton = document.getElementById("add-ingredient");
+            let convertRecipeButton = document.getElementById("convert-button");
+            let resetButton = document.getElementById("reset-button");
+            
+            addIngredientButton.addEventListener('click', addIngredient);
+            convertRecipeButton.addEventListener('click', convertRecipeButtonHandler);
+            resetButton.addEventListener('click', resetOutput);
+            
+            function addIngredient (){
+                //We create a clone of the target ingredient element, reset its values, and insert 
+                //the new, empty, ingredient element into the DOM
+                let newIngredientEntry = document.getElementById("ingredient").cloneNode(true);
+                newIngredientEntry.children[5].value = "";
+                newIngredientEntry.children[1].value = "";
+                
+                document.getElementById("ingredients").appendChild(newIngredientEntry);
+                
+                //Each time we add a new ingredient to the DOM, we update a Nodelist containing all 
+                //ingredients present on the page and add this event listener to each one
+                let addIngredientButtons = document.querySelectorAll("#add-ingredient");
+                
+                for (const button of addIngredientButtons){
+                    button.addEventListener('click', addIngredient);
+                }    
+            }
+            
+            //Checks to see if all of the yield inputs are valid, 
+            //called in the body of convertRecipeButtonHandler
+            function isYieldInputValid (){
+                let originalYield = document.getElementById("original-yield").value;
+                let userYield = document.getElementById("user-yield").value;
+                
+                return (originalYield === "" || userYield === "" || 
+                    originalYield === "0" || userYield === "0" ||
+                    isNaN(originalYield) || isNaN(userYield)) ? false : true;
+                
+            }
+
+            //Checks to see if all inputs in the ingredients list are valid, 
+            //called in the body of convertRecipeButtonHandler
+            function isIngredientInputValid (){
+                let ingredients = document.querySelectorAll("#ingredient");
+                //We iterate through all ingredients currently present in the DOM, 
+                //if we encounter invalid inputs, iteration will stop and return false, 
+                //otherwise the iteration will finish and function will return true
+                for (const ingredient of ingredients){
+                    let amount = ingredient.children[1].value;
+                    let item = ingredient.children[5].value
+                    if (amount === "" || isNaN(amount) || item === ""){
+                        return false
+                    }
+                }
+                return true;
+            }
+
+            //We call the convertRecipe function within the body of 
+            //this event handler after validating the user inputs
+            function convertRecipeButtonHandler (){    
+                if (isYieldInputValid() === false){
+                    alert("Please enter valid amounts");
+                } else if (isIngredientInputValid() === false){
+                    alert("Please enter valid amounts")
+                } else {
+                    convertRecipe();
+                }
+            }
+
+            //This function handles the actual manipulation and insertion of 
+            //new data into the user interface, 
+            //we call it in the body of the convertRecipeButtonHandler function
+            function convertRecipe (){
+                resetOutput(); //Resets the outputBox element to its original, empty state
+                let originalYield = document.getElementById("original-yield").value;
+                let userYield = document.getElementById("user-yield").value;
+                let multiplier = userYield / originalYield;
+                
+                let ingredients = document.querySelectorAll("#ingredient");
+                //We create a node list of all ingredients present on the page at the 
+                //time of the event. We iterate through the node list and, for each ingredient, 
+                //insert relevant data into the outputBox element.
+                for (const ingredient of ingredients){
+                    let amount = ingredient.children[1].value;
+                    let measurement = ingredient.children[3].value;
+                    let item = ingredient.children[5].value;
+                    let result;
+                    
+                    //Formats output depending on presence of a measurement value
+                    if (measurement === 'none'){
+                        result = `${(amount * multiplier).toFixed(2)} ${item}`
+                    } else {
+                        result = `${(amount * multiplier).toFixed(2)} ${measurement} ${item}`
+                    }
+                     
+                    //Inserts manipulated data into the UI
+                    let resultDisplay = document.createElement("p");
+                    let resultContent = document.createTextNode(`${result}`);
+                    let outputBox = document.getElementById("conversion-content");
+                    
+                    resultDisplay.appendChild(resultContent);
+                    outputBox.appendChild(resultDisplay);        
+                }
+            }
+
+            function resetOutput (){
+                let output = document.querySelectorAll("#conversion-content > p");
+                
+                for (const result of output){
+                    result.remove();
+                }
+            }
+             
+            
+        </script>
+    </body>
+
+</html>
