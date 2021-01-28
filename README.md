@@ -8,9 +8,8 @@ Simply enter the recipe's original yield in the appropriate input field, the amo
 
 DISCLAIMER: The conversion won't work if you are trying to use fractions
 
-![Recipe Calculator in action](https://imgur.com/F9lhxjG)
-![Recipe Calculator in action](https://imgur.com/GoRQ4Z4)
-
+![](RecipeCalculator/Screenshots/Recipe-Calc-Screenshot-1.png)
+![](RecipeCalculator/Screenshots/Recipe-Calc-Screenshot-2.png)
 ## Built With
 
 - HTML
